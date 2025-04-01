@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { Button, Checkbox, Dialog, Space } from 'antd-mobile';
 import axios from 'axios';
@@ -6,7 +6,7 @@ import { v4 } from 'uuid';
 import { config } from './config';
 import { ConfType, confTypes, PaymentResult } from './types';
 import { useTelegram } from './utils';
-import { BrowserRouter, Route, Router, Routes, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useSearchParams } from 'react-router-dom';
 const totalPrice = 10
 
 
