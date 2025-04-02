@@ -21,7 +21,7 @@ function Opp() {
     console.log('делаем новый платеж')
     let body = {
       price: 5,
-      returnUrl: "http://localhost:3000?payed=true",
+      returnUrl: "http://192.168.67.136:3000?payed=true",
       type
     }
 
@@ -35,7 +35,7 @@ function Opp() {
       password: config.secretKey
     }
 
-    axios.post('http://localhost:5556/newPayment', body, { headers, auth })
+    axios.post('http://192.168.67.136:5556/newPayment', body, { headers, auth })
       .then(response => {
         const data = response.data as PaymentResult
         console.log(data)
