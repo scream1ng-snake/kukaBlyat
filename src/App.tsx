@@ -35,7 +35,7 @@ function Opp() {
       password: config.secretKey
     }
 
-    axios.post('https://192.168.67.136:5556/newPayment', body, { headers, auth })
+    axios.post('https://elipelisr.lexcloud.ru/elipelibottest/newPayment', body, { headers, auth })
       .then(response => {
         const data = response.data as PaymentResult
         console.log(data)
