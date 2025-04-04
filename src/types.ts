@@ -4,6 +4,13 @@ export const confTypes = {
   embedded: "embedded",
 } as const
 export type ConfType = typeof confTypes[keyof typeof confTypes]
+export const loadStates = {
+  INITIAL: "INITIAL",
+  LOADING: "LOADING",
+  SUCCESS: "SUCCESS",
+  FAILED: "FAILED",
+} as const
+export type LoadState = typeof loadStates[keyof typeof loadStates]
 
 export type PaymentResult = {
   id: string,

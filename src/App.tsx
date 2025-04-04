@@ -4,7 +4,7 @@ import { Button, Checkbox, Dialog, Space } from 'antd-mobile';
 import axios from 'axios';
 import { v4 } from 'uuid';
 import { config } from './config';
-import { ConfType, confTypes, PaymentResult } from './types';
+import { ConfType, confTypes, LoadState, PaymentResult } from './types';
 import { useTelegram } from './utils';
 import { BrowserRouter, Route, Routes, useSearchParams } from 'react-router-dom';
 const totalPrice = 10
@@ -13,29 +13,23 @@ const totalPrice = 10
 function Opp() {
   const { tg } = useTelegram()
   const [params] = useSearchParams()
-  console.log(params)
   const [payed, setPayed] = useState(false)
   const [type, setType] = useState<ConfType>('redirect')
 
+  const [state, setState] = useState<LoadState>('INITIAL')
+
   function doOrder() {
+    setState('LOADING')
     console.log('делаем новый платеж')
     let body = {
-      price: 5,
-      returnUrl: "https://secret-prod-gurmag.netlify.app?payed=true",
-      type
+      redirect_url: window.location.origin + "?" + "payed=true",
+      type: "redirect",
+      orderId: 148196,
+      userId: 2132687
     }
 
-    let headers = {
-      'Idempotence-Key': v4(),
-      'Content-Type': 'application/json',
-    }
 
-    let auth = {
-      username: config.storeID,
-      password: config.secretKey
-    }
-
-    axios.post('https://elipelisr.lexcloud.ru/elipelibottest/newPayment', body, { headers, auth })
+    axios.post('https://elipelisr.lexcloud.ru/elipelibottest/PayOrderSaveCardNew', body)
       .then(response => {
         const data = response.data as PaymentResult
         console.log(data)
@@ -51,15 +45,18 @@ function Opp() {
               error_callback: function (error: any) {
                 Dialog.show({ content: 'Не удалось оплатить' })
                 checkoutWidget.destroy()
+                setState('FAILED')
               }
             })
             checkoutWidget.on("success", () => {
               setPayed(true)
+              setState('SUCCESS')
               console.log('Поздравляшки')
               Dialog.show({ content: 'Поздравляшки' })
               checkoutWidget.destroy()
             })
             checkoutWidget.on("fail", (err: any) => {
+              setState('FAILED')
               checkoutWidget.destroy()
               console.error(err)
               Dialog.show({
@@ -128,7 +125,12 @@ function Opp() {
           )}
         </Space>
         <h2><center>{`${totalPrice} руб`}</center></h2>
-        <Button onClick={doOrder}>Оплатить</Button>
+        <Button 
+          loading={state === 'LOADING'}
+          onClick={doOrder}
+        >
+          Оплатить
+        </Button>
       </div>
     );
   }
