@@ -2,8 +2,6 @@ import { useState } from 'react';
 import './App.css';
 import { Button, Checkbox, Dialog, Space } from 'antd-mobile';
 import axios from 'axios';
-import { v4 } from 'uuid';
-import { config } from './config';
 import { ConfType, confTypes, LoadState, PaymentResult } from './types';
 import { useTelegram } from './utils';
 import { BrowserRouter, Route, Routes, useSearchParams } from 'react-router-dom';
@@ -22,7 +20,7 @@ function Opp() {
     setState('LOADING')
     console.log('делаем новый платеж')
     let body = {
-      redirect_url: window.location.origin + "?" + "payed=true",
+      redirect_url: `${window.location.origin}?payed=true`,
       type: "redirect",
       orderId: 148196,
       userId: 2132687
@@ -69,7 +67,7 @@ function Opp() {
             })
             checkoutWidget.render('payment-form')
             break;
-          case "redirect":
+          case "redirect": 
             const { confirmation_url } = data.confirmation
             if (tg && (tg.platform?.toLowerCase() === 'android' || tg.platform?.toLowerCase() === 'ios')) {
               console.log('open redirect url in tg.openLink')
